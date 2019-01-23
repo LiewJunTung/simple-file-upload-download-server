@@ -1,4 +1,4 @@
-# simple-file-upload-download-server
+# simple-file-upload-download-https-server
 
 A simple host file to quickly upload or download file, from curl ([curl for windows](https://curl.haxx.se/download.html)) command.
 
@@ -47,4 +47,6 @@ curl http://domain.com/file?file=myFile.zip > myFile.zip
 
 # Docker
 
-docker run -e SERVER="http://domain.com" -p 3000:3000 -v /home/upload:/tmp simple-file-upload-download-server
+```
+docker run -d -e SERVER="https://192.168.1.47:8082" -p 8082:3000 -v /Users/user/tmp:/tmp liewjuntung/simple-upload-download-https-server
+```

@@ -23,10 +23,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const typescript_rest_1 = require("typescript-rest");
 const fs = require("fs");
+const https = require("https");
 const port = process.argv[2] || process.env.PORT || '3000';
 const filesDir = process.argv[3] || process.env.DIR || __dirname;
-const serverUrl = process.argv[4] || process.env.SERVER || 'http://localhost';
-const instructions = 'curl -F file=@myFile.ext ' + serverUrl + ':' + port;
+const serverUrl = process.argv[4] || process.env.SERVER || 'https://localhost';
+const instructions = 'curl -F file=@myFile.ext ' + serverUrl;
 let FileService = class FileService {
     home() {
         return { 'instruction': instructions };
@@ -74,9 +75,15 @@ __decorate([
 FileService = __decorate([
     typescript_rest_1.Path("/")
 ], FileService);
+let privateKey = fs.readFileSync("/file/localhost.key");
+let certificate = fs.readFileSync("/file/localhost.crt");
+let options = {
+    key: privateKey,
+    cert: certificate
+};
 let app = express();
 typescript_rest_1.Server.buildServices(app);
-app.listen(port, function () {
+https.createServer(options, app).listen(port, function () {
     console.log('Server listening on port ' + port);
-    console.log('use commande : ' + instructions);
+    console.log('use command : ' + instructions);
 });
